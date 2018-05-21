@@ -19,8 +19,15 @@ void LED_init()
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE INITIATING");
         }
+        rewind(pLEDTris[i]);
+
         snprintf(buf, 50, "%s%d%s", LED_FILE_PRE, i, LED_BRIGHTNESS_SUF);
         pLEDBri[i] = fopen(buf, "w");
+        charWritten = fprintf(pLEDBri[i], "%d", 0);
+        if (charWritten <= 0){
+            printf("ERROR WRITING DATA WHILE TURNING OFF");
+        }
+        rewind(pLEDBri[i]);
     }
 }
 
@@ -35,7 +42,7 @@ void LED_finish()
 
 // j: 0 => turn off
 // j: 1 => turn on
-// i: i_th LED
+// i: i_th LED (i starts from 0)
 static void LED_turn(int i, int j)
 {
     if ( i < 0 || i >= LED_SIZE){
@@ -47,6 +54,7 @@ static void LED_turn(int i, int j)
     if (charWritten <= 0){
         printf("ERROR WRITING DATA WHILE TURNING ON");
     }
+    rewind(pLEDBri[i]);
 }
 
 void LED_turn_on(int i)
