@@ -7,22 +7,31 @@
 #define LED_SIZE 4
 
 static FILE *pLEDTris[LED_SIZE];
+static FILE *pLEDBri[LED_SIZE];
 
 void LED_init()
 {
     char buf[50];
-    for(int i=0; i < LED_SIZE; i++){
+    for (int i=0; i < LED_SIZE; i++){
         snprintf(buf, 50, "%s%d%s", LED_FILE_PRE, i, LED_TRIGGER_SUF);
         pLEDTris[i] = fopen(buf, "w");
         int charWritten = fprintf(pLEDTris[i], "none");
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE INITIATING");
         }
-    }
-    for (int i=0; i < LED_SIZE; i++){
-        fclose(pLEDTris[i]);
+        snprintf(buf, 50, "%s%d%s", LED_FILE_PRE, i, LED_BRIGHTNESS_SUF);
+        pLEDBri[i] = fopen(buf, "w");
     }
 }
+
+void LED_finish()
+{
+    for (int i=0; i< LED_SIZE; i++){
+        fclose(pLEDTris[i]);
+        fclose(pLEDBri[i]);
+    }
+}
+
 
 // j: 0 => turn off
 // j: 1 => turn on
@@ -33,17 +42,11 @@ static void LED_turn(int i, int j)
         printf("ERROR: THERE IS NO %d_th LED\n", i);
         return;
     }
-    
-    char buf[50];
-    snprintf(buf, 50, "%s%d%s", LED_FILE_PRE, i, LED_BRIGHTNESS_SUF);
-    
-    FILE *pLEDBri = fopen(buf, "w");
 
-    int charWritten = fprintf(pLEDBri, "%d", j);
+    int charWritten = fprintf(pLEDBri[i], "%d", j);
     if (charWritten <= 0){
         printf("ERROR WRITING DATA WHILE TURNING ON");
     }
-    fclose(pLEDBri);
 }
 
 void LED_turn_on(int i)

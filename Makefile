@@ -9,7 +9,7 @@ help:
 	@echo "Targets include all, app, and clean"
 all: app done
 app:
-	$(CC_C) $(CFLAGS) helloWorld.c LED.c -o $(OUTDIR)/$(OUTFILE)
+	$(CC_C) $(CFLAGS) helloWorld.c LED.c joystick.c -o $(OUTDIR)/$(OUTFILE)
 #	ls -l $(OUTDIR)/$(OUTFILE)
 
 done:

@@ -1,18 +1,22 @@
 #include <stdio.h>
+#include <unistd.h>
 #include "LED.h"
-
-// Joystick value files
-#define JSUP_VALUE "/sys/class/gpio/gpio26/value"
-#define JSDOWN_VALUE "/sys/class/gpio/gpio46/value"
-#define JSLEFT_VALUE "/sys/class/gpio/gpio65/value"
-#define JSRIGHT_VALUE "/sys/class/gpio/gpio47/value"
-
-void writeNoneToFile(FILE*);
+#include "joystick.h"
 
 int main()
 {
     printf("Hello embedded world, from Junha Choi!\n");
     LED_init();
+    joystick_init();
     LED_turn_on(0);
+    LED_finish();
+    int i = -1;
+    while (i == -1){
+        printf("sleeping\n");
+        sleep(1);
+        i = joystick_read();
+    }
+    printf("%d\n", joystick_read());
+    joystick_finish();
     return 0;
 }
