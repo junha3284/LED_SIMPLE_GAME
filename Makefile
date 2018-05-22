@@ -1,4 +1,4 @@
-OUTFILE = helloWorld
+OUTFILE = hello
 OUTDIR = $(HOME)/cmpt433/public/myApps
 CROSS_COMPILE = arm-linux-gnueabihf-
 CC_C = $(CROSS_COMPILE)gcc
