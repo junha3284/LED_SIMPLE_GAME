@@ -153,9 +153,9 @@ void LED_blink_times(int on_time, int off_time, int times)
         }
     }
 
-    int total_nano_seconds = (on_time + off_time)*times*1000000;
-    long seconds = (long) (total_nano_seconds / 1000000000);
-    long nanoseconds = (long) (total_nano_seconds % 1000000000);
+    int total_miliseconds = (on_time + off_time)*times;
+    long seconds = (long) (total_miliseconds / 1000);
+    long nanoseconds = (long) (total_miliseconds % 1000);
     struct timespec reqDelay = {seconds, nanoseconds};
     nanosleep(&reqDelay, (struct timespec *) NULL);
     printf("%ld second, %ld nanoseconds\n", seconds, nanoseconds);

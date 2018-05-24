@@ -1,9 +1,19 @@
 #ifndef _JOYSTICK_H_
 #define _JOYSTICK_H_
 
-void joystick_init();
+enum Joystick_input {
+    None = -1,
+    Up,
+    Right,
+    Down,
+    Left,
+};
 
-void joystick_finish();
+typedef enum Joystick_input Joystick_input;
+
+int Joystick_init();
+
+void Joystick_finish();
 
 // read user input from joystick
 // -1: no input yet
@@ -11,6 +21,6 @@ void joystick_finish();
 // 1: right
 // 2: down
 // 3: left
-int joystick_read();
+Joystick_input Joystick_read();
 
 #endif

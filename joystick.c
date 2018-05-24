@@ -16,7 +16,7 @@
 static FILE *pJoystickVal[JOYSTICK_SIZE];
 static int gpio_nums[JOYSTICK_SIZE] = {GPIO_UP, GPIO_RT, GPIO_DN, GPIO_JSLFT};
 
-void joystick_init()
+int Joystick_init()
 {
     char buf[30];
     for (int i=0; i < JOYSTICK_SIZE; i++){
@@ -24,28 +24,28 @@ void joystick_init()
         pJoystickVal[i] = fopen(buf, "r");
         if (pJoystickVal[i] == NULL){
             printf("ERROR: Unable to open file (%s) for read\n", buf);
-            return; 
+            return 1; 
         }
     }
+    return 0;
 }
 
-void joystick_finish()
+void Joystick_finish()
 {
     for (int i=0; i < JOYSTICK_SIZE; i++){
         fclose(pJoystickVal[i]);
     }
 }
 
-// read user input from joystick
-// -1: no input
-// 0: up
-// 1: right
-// 2: down
-// 3: left
-int joystick_read()
+// -1: None 
+// 0: Up
+// 1: Right
+// 2: Down 
+// 3: Left
+Joystick_input Joystick_read()
 {
     char c;
-    joystick_init();
+    Joystick_init();
     for (int i=0; i < JOYSTICK_SIZE; i++){
         c = fgetc(pJoystickVal[i]);
         rewind(pJoystickVal[i]);

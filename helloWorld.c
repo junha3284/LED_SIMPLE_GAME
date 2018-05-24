@@ -15,12 +15,14 @@ int main()
     printf("Hello embedded world, from Junha Choi!\n\n");
     
     LED_init();
-    joystick_init();
+    Joystick_init();
 
     printf("Press the Zen cape's Joystick in the direction of the LED.\n");
     printf("\t UP for LED 0 (top)\n");
     printf("\t Down for LED 3 (bottom)\n");
     printf("\t LEFT/RIGHT for exit app.\n");
+
+    LED_blink_times(200,200,5);
 
     int i = -1;
     int answer;
@@ -39,7 +41,7 @@ int main()
         
         // Get User input from joystick
         while( i == -1){
-            i = joystick_read();
+            i = Joystick_read();
             sleep(1);
         }
         
@@ -65,12 +67,10 @@ int main()
         i = -1;
     }
 
-
     printf("Your final score was (%d / %d)\n", score, trial);
     printf("Thank you for playing!\n");
-     
     
     LED_finish();
-    joystick_finish();
+    Joystick_finish();
     return 0;
 }
