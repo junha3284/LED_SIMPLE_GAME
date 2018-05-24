@@ -1,3 +1,6 @@
+#ifndef _JOYSTICK_H_
+#define _JOYSTICK_H_
+
 void joystick_init();
 
 void joystick_finish();
@@ -9,3 +12,5 @@ void joystick_finish();
 // 2: down
 // 3: left
 int joystick_read();
+
+#endif

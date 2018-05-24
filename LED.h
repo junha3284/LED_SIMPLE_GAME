@@ -1,3 +1,6 @@
+#ifndef _LED_H_
+#define _LED_H_
+
 // prepare all files and change all LEDs trigger to none
 void LED_init();
 
@@ -20,3 +23,5 @@ void LED_blink(int i, int j);
 // @j: ms off
 // @times: how many times blink
 void LED_blink_times(int i, int j, int times);
+
+#endif
