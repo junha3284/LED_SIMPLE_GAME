@@ -15,7 +15,7 @@
 static FILE *pLEDTris[LED_SIZE];
 static FILE *pLEDBri[LED_SIZE];
 
-void LED_init()
+int LED_init()
 {
     char buf[PATH_MAX_LENGTH];
     for (int i=0; i < LED_SIZE; i++){
@@ -24,6 +24,7 @@ void LED_init()
         int charWritten = fprintf(pLEDTris[i], "none");
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE INITIATING");
+            return 1;
         }
         rewind(pLEDTris[i]);
 
@@ -32,9 +33,11 @@ void LED_init()
         charWritten = fprintf(pLEDBri[i], "%d", 0);
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE TURNING OFF");
+            return 1;
         }
         rewind(pLEDBri[i]);
     }
+    return 0;
 }
 
 void LED_finish()
@@ -49,11 +52,11 @@ void LED_finish()
 // j: 0 => turn off
 // j: 1 => turn on
 // i: i_th LED (i starts from 0)
-static void LED_turn(int i, int j)
+static int LED_turn(int i, int j)
 {
     if ( i < 0 || i >= LED_SIZE){
         printf("ERROR: THERE IS NO %d_th LED\n", i);
-        return;
+        return 1;
     }
 
     int charWritten = fprintf(pLEDBri[i], "%d", j);
@@ -61,27 +64,29 @@ static void LED_turn(int i, int j)
         printf("ERROR WRITING DATA WHILE TURNING ON LED");
     }
     rewind(pLEDBri[i]);
+    return 0;
 }
 
-void LED_turn_on(int i)
+int LED_turn_on(int i)
 {
-   LED_turn(i,1); 
+   return LED_turn(i,1); 
 }
 
-void LED_turn_off(int i)
+int LED_turn_off(int i)
 {
-   LED_turn(i,0); 
+   return LED_turn(i,0); 
 }
 
 // blick LED
 // @i ms on
 // @j ms off
-void LED_blink(int on_time, int off_time)
+int LED_blink(int on_time, int off_time)
 {
     for (int i=0; i < LED_SIZE; i++){
         int charWritten = fprintf(pLEDTris[i], "timer");  
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE BLICKING LED");
+            return 0;
         }
         rewind(pLEDTris[i]);
     }
@@ -106,6 +111,7 @@ void LED_blink(int on_time, int off_time)
 
         if (charWritten1 <= 0 || charWritten2 <= 0){
             printf("ERROR WRITING DATA WHILE WRITING DELAY DATA FOR LED");
+            return 1;
         }
     }
 
@@ -113,18 +119,20 @@ void LED_blink(int on_time, int off_time)
         fclose(pLEDDelayOn[i]);
         fclose(pLEDDelayOff[i]);
     }
+    return 0;
 }
 
 // blick LED
 // @i ms on
 // @j ms off
 // @times: how many times blink
-void LED_blink_times(int on_time, int off_time, int times)
+int LED_blink_times(int on_time, int off_time, int times)
 {
     for (int i=0; i < LED_SIZE; i++){
         int charWritten = fprintf(pLEDTris[i], "timer");  
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE BLICKING LED");
+            return 1;
         }
         rewind(pLEDTris[i]);
     }
@@ -150,6 +158,7 @@ void LED_blink_times(int on_time, int off_time, int times)
         rewind(pLEDDelayOff[i]);
         if (charWritten1 <= 0 || charWritten2 <= 0){
             printf("ERROR WRITING DATA WHILE WRITING DELAY DATA FOR LED");
+            return 1;
         }
     }
 
@@ -169,7 +178,9 @@ void LED_blink_times(int on_time, int off_time, int times)
         int charWritten = fprintf(pLEDTris[i], "none");  
         if (charWritten <= 0){
             printf("ERROR WRITING DATA WHILE BLICKING LED");
+            return 1;
         }
         rewind(pLEDTris[i]);
     }
+    return 0;
 }

@@ -14,17 +14,21 @@ int main()
 {
     printf("Hello embedded world, from Junha Choi!\n\n");
     
+    int function_result;
+
     LED_init();
-    Joystick_init();
+    function_result = Joystick_init();
+    if( function_result == 1){
+        printf("ERROR: Joystick_init() failed\n");
+        exit(1);
+    }
 
     printf("Press the Zen cape's Joystick in the direction of the LED.\n");
     printf("\t UP for LED 0 (top)\n");
     printf("\t Down for LED 3 (bottom)\n");
     printf("\t LEFT/RIGHT for exit app.\n");
 
-    LED_blink_times(200,200,5);
-
-    int i = -1;
+    Joystick_input user_input = None;
     int answer;
     int trial = 0;
     int score = 0;
@@ -37,11 +41,15 @@ int main()
         
         // Turn on top LED if answer is 0
         // otherwise, turn on bottom LED
-        LED_turn_on(answer*3);
+        function_result = LED_turn_on(answer*3);
+        if( function_result == 1){
+            printf("ERROR: Joystick_init() failed\n");
+            exit(1);
+        }
         
         // Get User input from joystick
-        while( i == -1){
-            i = Joystick_read();
+        while( user_input == None){
+            user_input = Joystick_read();
             sleep(1);
         }
         
@@ -51,20 +59,30 @@ int main()
         // If user got the correct answer, blink LED 1 times and give one score
         // If user got the wrong answer, blink LED 5 times 
         // If user put Joystick left or right, finish the loop
-        if (i == answer*2){
+        if (user_input == answer*2){
             printf("Corect!\n");
-            LED_blink_times(LED_RIGHT_BLINK_DURATION, LED_RIGHT_BLINK_DURATION, LED_RIGHT_BLINK_NUM);
+            function_result = LED_blink_times(LED_RIGHT_BLINK_DURATION, LED_RIGHT_BLINK_DURATION, LED_RIGHT_BLINK_NUM);
+            if( function_result == 1){
+                printf("ERROR: Joystick_init() failed\n");
+                exit(1);
+            }
             score++;
         }
-        else if (i == 1 || i == 3){
+
+        else if (user_input == Left || user_input == Right){
             break;
         }
+
         else {
             printf("Incorrect! :(\n");
-            LED_blink_times(LED_WRONG_BLINK_DURATION, LED_WRONG_BLINK_DURATION, LED_WRONG_BLINK_NUM);
+            function_result = LED_blink_times(LED_WRONG_BLINK_DURATION, LED_WRONG_BLINK_DURATION, LED_WRONG_BLINK_NUM);
+            if( function_result == 1){
+                printf("ERROR: Joystick_init() failed\n");
+                exit(1);
+            }
         }
         trial++;
-        i = -1;
+        user_input = None;
     }
 
     printf("Your final score was (%d / %d)\n", score, trial);
