@@ -14,10 +14,7 @@ int main()
 {
     printf("Hello embedded world, from Junha Choi!\n\n");
     
-    int function_result;
-
-    LED_init();
-    function_result = Joystick_init();
+    int function_result = Joystick_init() || LED_init();
     if( function_result == 1){
         printf("ERROR: Joystick_init() failed\n");
         exit(1);
@@ -43,7 +40,7 @@ int main()
         // otherwise, turn on bottom LED
         function_result = LED_turn_on(answer*3);
         if( function_result == 1){
-            printf("ERROR: Joystick_init() failed\n");
+            printf("ERROR: LED_turn_on failed\n");
             exit(1);
         }
         
@@ -54,7 +51,11 @@ int main()
         }
         
         // Turn off the turned on LED
-        LED_turn_off(answer*3);
+        function_result = LED_turn_off(answer*3);
+        if( function_result == 1){
+            printf("ERROR: LED_turn_off failed\n");
+            exit(1);
+        }
 
         // If user got the correct answer, blink LED 1 times and give one score
         // If user got the wrong answer, blink LED 5 times 
