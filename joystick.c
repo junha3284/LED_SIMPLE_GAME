@@ -12,15 +12,16 @@
 #define GPIO_JSLFT 65
 
 #define JOYSTICK_SIZE 4
+#define PATH_MAX_LENGTH 32 
 
 static FILE *pJoystickVal[JOYSTICK_SIZE];
 static int gpio_nums[JOYSTICK_SIZE] = {GPIO_UP, GPIO_RT, GPIO_DN, GPIO_JSLFT};
 
 int Joystick_init()
 {
-    char buf[30];
+    char buf[32];
     for (int i=0; i < JOYSTICK_SIZE; i++){
-        snprintf(buf, 30, "%s%d%s", GPIO_PRE, gpio_nums[i], GPIO_VALUE_SUF);
+        snprintf(buf, 32, "%s%d%s", GPIO_PRE, gpio_nums[i], GPIO_VALUE_SUF);
         pJoystickVal[i] = fopen(buf, "r");
         if (pJoystickVal[i] == NULL){
             printf("ERROR: Unable to open file (%s) for read\n", buf);

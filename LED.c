@@ -10,7 +10,7 @@
 
 #define LED_SIZE 4
 
-#define PATH_MAX_LENGTH 50
+#define PATH_MAX_LENGTH 64 
 
 static FILE *pLEDTris[LED_SIZE];
 static FILE *pLEDBri[LED_SIZE];
@@ -49,9 +49,9 @@ void LED_finish()
 }
 
 
-// j: 0 => turn off
-// j: 1 => turn on
 // i: i_th LED (i starts from 0)
+// j: 0 => turn off
+//    1 => turn on 
 static int LED_turn(int i, int j)
 {
     if ( i < 0 || i >= LED_SIZE){
@@ -77,9 +77,7 @@ int LED_turn_off(int i)
    return LED_turn(i,0); 
 }
 
-// blick LED
-// @i ms on
-// @j ms off
+// blick LED with on_time (ms) and off_time (ms)
 int LED_blink(int on_time, int off_time)
 {
     for (int i=0; i < LED_SIZE; i++){
@@ -123,8 +121,6 @@ int LED_blink(int on_time, int off_time)
 }
 
 // blick LED
-// @i ms on
-// @j ms off
 // @times: how many times blink
 int LED_blink_times(int on_time, int off_time, int times)
 {
@@ -167,7 +163,6 @@ int LED_blink_times(int on_time, int off_time, int times)
     long nanoseconds = (long) (total_miliseconds % 1000);
     struct timespec reqDelay = {seconds, nanoseconds};
     nanosleep(&reqDelay, (struct timespec *) NULL);
-    printf("%ld second, %ld nanoseconds\n", seconds, nanoseconds);
     
     for (int i=0; i < LED_SIZE; i++){
         fclose(pLEDDelayOn[i]);

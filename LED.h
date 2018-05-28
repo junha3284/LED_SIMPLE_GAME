@@ -13,15 +13,11 @@ int LED_turn_on(int i);
 // turn off i_th LED on beaglebone (i starts from 0)
 int LED_turn_off(int i);
 
-// blick LED
-// @i ms on
-// @j ms off
-int LED_blink(int i, int j);
+// blick LED with on_time (ms) and off_time(ms)
+int LED_blink(int on_time, int off_time);
 
-// blick LED
-// @i: ms on
-// @j: ms off
+// blick LED with on_time (ms) and off_time(ms)
 // @times: how many times blink
-int LED_blink_times(int i, int j, int times);
+int LED_blink_times(int on_time, int off_time, int times);
 
 #endif
