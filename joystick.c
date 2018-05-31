@@ -2,8 +2,10 @@
 #include <string.h>
 #include "joystick.h"
 
+#define GPIO "/sys/class/gpio"
 #define GPIO_PRE "/sys/class/gpio/gpio"
 #define GPIO_VALUE_SUF "/value"
+#define GPIO_EXPORT_SUF "/export"
 
 // Joystick Up, Right, Down, Left GPIO numbers
 #define GPIO_UP 26
@@ -20,6 +22,18 @@ static int gpio_nums[JOYSTICK_SIZE] = {GPIO_UP, GPIO_RT, GPIO_DN, GPIO_JSLFT};
 int Joystick_init()
 {
     char buf[32];
+    snprintf(buf, 32, "%s%s", GPIO, GPIO_EXPORT_SUF);
+    FILE *pJoystickExport = fopen(buf, "w");
+    for (int i=0; i < JOYSTICK_SIZE; i++){
+        int charWritten = fprintf(pJoystickExport,"%d", gpio_nums[i]);
+        if (charWritten <= 0){
+            printf("ERROR EXPORTING GPIO pins\n");
+            return 1;
+        }
+        rewind(pJoystickExport);
+    }
+    fclose(pJoystickExport);
+
     for (int i=0; i < JOYSTICK_SIZE; i++){
         snprintf(buf, 32, "%s%d%s", GPIO_PRE, gpio_nums[i], GPIO_VALUE_SUF);
         pJoystickVal[i] = fopen(buf, "r");
